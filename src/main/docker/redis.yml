@@ -1,0 +1,9 @@
+version: '2'
+services:
+  admin-redis:
+    image: redis:latest
+#    restart: always
+    volumes:
+      - ~/docker/admin/redis/:/data
+    ports:
+      - 6379:6379

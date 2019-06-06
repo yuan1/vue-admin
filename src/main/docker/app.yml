@@ -1,0 +1,24 @@
+version: '2'
+services:
+  admin-app:
+    #文件下载不下来时
+    #docker login --username=1371271347 ccr.ccs.tencentyun.com
+    #password : limingyuan1996
+    image: ccr.ccs.tencentyun.com/limy/admin:1.0.0
+#    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+      - SPRING_DATASOURCE_DYNAMIC_datasource_primary_URL=jdbc:mysql://admin-mysql:3306/admin?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+      - ADMIN_SLEEP=10 # gives time for the database to boot before the application
+      - SPRING_REDIS_HOST=admin-redis
+    ports:
+      - 9527:9527
+  admin-mysql:
+    extends:
+      file: mysql.yml
+      service: admin-mysql
+  admin-redis:
+    extends:
+      file: redis.yml
+      service: admin-redis
+
