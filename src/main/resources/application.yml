@@ -79,6 +79,6 @@ admin:
         num: 1000
   shiro:
     # 后端免认证接口 url
-    anonUrl: /api/login,/api/logout/**,/api/regist,/api/user/check/**
+    anonUrl: /api/login,/api/logout/**,/api/regist,/api/user/check/**,/v2/api-docs,/swagger-ui.html,/webjars/**,/swagger-resources/**
     # token有效期，单位秒
     jwtTimeOut: 3600
