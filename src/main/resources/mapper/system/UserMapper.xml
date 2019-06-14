@@ -24,7 +24,7 @@
         u.password,
         u.email,
         u.mobile,
-        u. STATUS,
+        u.STATUS,
         u.create_time createTime,
         u.ssex,
         d.dept_id deptId,
@@ -58,8 +58,7 @@
         <if test="user.status != null and user.status != ''">
             AND u.status = #{user.status}
         </if>
-        group by u.username
-
+        GROUP BY u.username
     </select>
 
     <select id="findDetail" resultType="user" parameterType="string">
@@ -69,7 +68,7 @@
         u.password,
         u.email,
         u.mobile,
-        u. STATUS,
+        u.STATUS,
         u.create_time createTime,
         u.ssex,
         d.dept_id deptId,
@@ -85,6 +84,6 @@
         LEFT JOIN t_user_role ur ON (u.user_id = ur.user_id)
         LEFT JOIN t_role r ON r.role_id = ur.role_id
         WHERE  u.username = #{username}
-        group by u.username
+        GROUP BY u.username
     </select>
 </mapper>

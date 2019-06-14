@@ -57,7 +57,7 @@ public class RoleController extends BaseController {
     @Log("新增角色")
     @PostMapping
     @RequiresPermissions("role:add")
-    public void addRole(@Valid Role role) throws AdminException {
+    public void addRole(@Valid @RequestBody Role role) throws AdminException {
         try {
             this.roleService.createRole(role);
         } catch (Exception e) {
@@ -84,7 +84,7 @@ public class RoleController extends BaseController {
     @Log("修改角色")
     @PutMapping
     @RequiresPermissions("role:update")
-    public void updateRole(Role role) throws AdminException {
+    public void updateRole(@RequestBody Role role) throws AdminException {
         try {
             this.roleService.updateRole(role);
         } catch (Exception e) {
@@ -94,7 +94,7 @@ public class RoleController extends BaseController {
         }
     }
 
-    @PostMapping("excel")
+    @GetMapping("excel")
     @RequiresPermissions("role:export")
     public void export(QueryRequest queryRequest, Role role, HttpServletResponse response) throws AdminException {
         try {

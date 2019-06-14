@@ -39,7 +39,7 @@ public class DeptController extends BaseController {
     @Log("新增部门")
     @PostMapping
     @RequiresPermissions("dept:add")
-    public void addDept(@Valid Dept dept) throws AdminException {
+    public void addDept(@Valid @RequestBody Dept dept) throws AdminException {
         try {
             this.deptService.createDept(dept);
         } catch (Exception e) {
@@ -66,7 +66,7 @@ public class DeptController extends BaseController {
     @Log("修改部门")
     @PutMapping
     @RequiresPermissions("dept:update")
-    public void updateDept(@Valid Dept dept) throws AdminException {
+    public void updateDept(@Valid @RequestBody Dept dept) throws AdminException {
         try {
             this.deptService.updateDept(dept);
         } catch (Exception e) {
@@ -76,7 +76,7 @@ public class DeptController extends BaseController {
         }
     }
 
-    @PostMapping("excel")
+    @GetMapping("excel")
     @RequiresPermissions("dept:export")
     public void export(Dept dept, QueryRequest request, HttpServletResponse response) throws AdminException {
         try {

@@ -5,6 +5,7 @@ import cn.javayuan.admin.common.controller.BaseController;
 import cn.javayuan.admin.common.domain.QueryRequest;
 import cn.javayuan.admin.common.exception.AdminException;
 import cn.javayuan.admin.common.utils.MD5Util;
+import cn.javayuan.admin.system.controller.vm.UserVM;
 import cn.javayuan.admin.system.domain.User;
 import cn.javayuan.admin.system.domain.UserConfig;
 import cn.javayuan.admin.system.service.UserConfigService;
@@ -56,7 +57,7 @@ public class UserController extends BaseController {
     @Log("新增用户")
     @PostMapping
     @RequiresPermissions("user:add")
-    public void addUser(@Valid User user) throws AdminException {
+    public void addUser(@Valid @RequestBody User user) throws AdminException {
         try {
             this.userService.createUser(user);
         } catch (Exception e) {
@@ -69,7 +70,7 @@ public class UserController extends BaseController {
     @Log("修改用户")
     @PutMapping
     @RequiresPermissions("user:update")
-    public void updateUser(@Valid User user) throws AdminException {
+    public void updateUser(@Valid @RequestBody User user) throws AdminException {
         try {
             this.userService.updateUser(user);
         } catch (Exception e) {
@@ -94,7 +95,7 @@ public class UserController extends BaseController {
     }
 
     @PutMapping("profile")
-    public void updateProfile(@Valid User user) throws AdminException {
+    public void updateProfile(@Valid @RequestBody User user) throws AdminException {
         try {
             this.userService.updateProfile(user);
         } catch (Exception e) {
@@ -105,11 +106,9 @@ public class UserController extends BaseController {
     }
 
     @PutMapping("avatar")
-    public void updateAvatar(
-            @NotBlank(message = "{required}") String username,
-            @NotBlank(message = "{required}") String avatar) throws AdminException {
+    public void updateAvatar(@Valid @RequestBody UserVM.UserUAVM uavm) throws AdminException {
         try {
-            this.userService.updateAvatar(username, avatar);
+            this.userService.updateAvatar(uavm.getUsername(), uavm.getAvatar());
         } catch (Exception e) {
             message = "修改头像失败";
             log.error(message, e);
@@ -118,7 +117,7 @@ public class UserController extends BaseController {
     }
 
     @PutMapping("userconfig")
-    public void updateUserConfig(@Valid UserConfig userConfig) throws AdminException {
+    public void updateUserConfig(@Valid @RequestBody UserConfig userConfig) throws AdminException {
         try {
             this.userConfigService.update(userConfig);
         } catch (Exception e) {
@@ -129,11 +128,9 @@ public class UserController extends BaseController {
     }
 
     @GetMapping("password/check")
-    public boolean checkPassword(
-            @NotBlank(message = "{required}") String username,
-            @NotBlank(message = "{required}") String password) {
-        String encryptPassword = MD5Util.encrypt(username, password);
-        User user = userService.findByName(username);
+    public boolean checkPassword(@Valid @RequestBody UserVM.UserUPVM upvm) {
+        String encryptPassword = MD5Util.encrypt(upvm.getUsername(), upvm.getPassword());
+        User user = userService.findByName(upvm.getUsername());
         if (user != null)
             return StringUtils.equals(user.getPassword(), encryptPassword);
         else
@@ -141,11 +138,9 @@ public class UserController extends BaseController {
     }
 
     @PutMapping("password")
-    public void updatePassword(
-            @NotBlank(message = "{required}") String username,
-            @NotBlank(message = "{required}") String password) throws AdminException {
+    public void updatePassword(@Valid @RequestBody UserVM.UserUPVM upvm) throws AdminException {
         try {
-            userService.updatePassword(username, password);
+            userService.updatePassword(upvm.getUsername(), upvm.getPassword());
         } catch (Exception e) {
             message = "修改密码失败";
             log.error(message, e);
@@ -153,7 +148,7 @@ public class UserController extends BaseController {
         }
     }
 
-    @PutMapping("password/reset")
+    @GetMapping("password/reset")
     @RequiresPermissions("user:reset")
     public void resetPassword(@NotBlank(message = "{required}") String usernames) throws AdminException {
         try {
@@ -166,9 +161,9 @@ public class UserController extends BaseController {
         }
     }
 
-    @PostMapping("excel")
+    @GetMapping("excel")
     @RequiresPermissions("user:export")
-    public void export(QueryRequest queryRequest, User user, HttpServletResponse response) throws AdminException {
+    public void export(QueryRequest queryRequest,User user, HttpServletResponse response) throws AdminException {
         try {
             List<User> users = this.userService.findUserDetail(user, queryRequest).getRecords();
             ExcelKit.$Export(User.class, response).downXlsx(users, false);

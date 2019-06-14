@@ -1,51 +1,55 @@
 package cn.javayuan.admin.common.config;
 
-import cn.javayuan.admin.common.authentication.JWTFilter;
+import com.google.common.collect.Lists;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import springfox.documentation.builders.ParameterBuilder;
+import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.schema.ModelRef;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.Contact;
-import springfox.documentation.service.Parameter;
+import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-import java.util.*;
+import java.util.List;
 
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {
     @Bean
-    public Docket api() {
-        ParameterBuilder paramBuilder = new ParameterBuilder();
-        List<Parameter> params = new ArrayList<>();
-        paramBuilder.name(JWTFilter.TOKEN).modelRef(new ModelRef("string"))
-                .parameterType("header")
-                .required(false)
-                .build();
-        params.add(paramBuilder.build());
+    public Docket createRestApi() {
         return new Docket(DocumentationType.SWAGGER_2)
-                .globalOperationParameters(params)
+                .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.any())
+                .apis(RequestHandlerSelectors.basePackage("cn.javayuan.admin"))
                 .paths(PathSelectors.any())
                 .build()
-                .apiInfo(apiInfo())
-                .consumes(new HashSet<>(Collections.singletonList("application/json")))
-                .produces(new HashSet<>(Collections.singletonList("application/json")));
+                .securityContexts(Lists.newArrayList(securityContext())).securitySchemes(Lists.<SecurityScheme>newArrayList(apiKey()));
     }
 
     private ApiInfo apiInfo() {
-        return new ApiInfo(
-                "Admin REST API",
-                "Admin description of API.",
-                "development",
-                "Terms of service",
-                new Contact("limy", "http://www.javayuan.cn", "limy@videon.cn"),
-                "License of API", "API license URL", Collections.emptyList());
+        return new ApiInfoBuilder()
+                .title("Admin RESTful APIs")
+                .description("limy")
+                .termsOfServiceUrl("http://localhost:9527/")
+                .contact("limingyuan1996@gmail.com")
+                .version("1.0")
+                .build();
+    }
+    private ApiKey apiKey() {
+        return new ApiKey("BearerToken", "Authentication", "header");
+    }
+    private SecurityContext securityContext() {
+        return SecurityContext.builder()
+                .securityReferences(defaultAuth())
+                .forPaths(PathSelectors.regex("/.*"))
+                .build();
+    }
+    private List<SecurityReference> defaultAuth() {
+        AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
+        AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
+        authorizationScopes[0] = authorizationScope;
+        return Lists.newArrayList(new SecurityReference("BearerToken", authorizationScopes));
     }
 }

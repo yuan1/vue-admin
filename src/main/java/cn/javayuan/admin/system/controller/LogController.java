@@ -50,7 +50,7 @@ public class LogController extends BaseController {
         }
     }
 
-    @PostMapping("excel")
+    @GetMapping("excel")
     @RequiresPermissions("log:export")
     public void export(QueryRequest request, SysLog sysLog, HttpServletResponse response) throws AdminException {
         try {

@@ -48,7 +48,7 @@ public class JobLogController extends BaseController {
         }
     }
 
-    @PostMapping("excel")
+    @GetMapping("excel")
     @RequiresPermissions("jobLog:export")
     public void export(QueryRequest request, JobLog jobLog, HttpServletResponse response) throws AdminException {
         try {

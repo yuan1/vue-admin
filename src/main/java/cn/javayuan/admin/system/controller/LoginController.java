@@ -9,6 +9,7 @@ import cn.javayuan.admin.common.domain.AdminResponse;
 import cn.javayuan.admin.common.exception.AdminException;
 import cn.javayuan.admin.common.properties.AdminProperties;
 import cn.javayuan.admin.common.service.RedisService;
+import cn.javayuan.admin.system.controller.vm.UserVM;
 import cn.javayuan.admin.system.dao.LoginLogMapper;
 import cn.javayuan.admin.system.domain.LoginLog;
 import cn.javayuan.admin.system.domain.User;
@@ -27,6 +28,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -53,11 +55,9 @@ public class LoginController {
 
     @PostMapping("/login")
     @Limit(key = "login", period = 60, count = 20, name = "登录接口", prefix = "limit")
-    public AdminResponse login(
-            @NotBlank(message = "{required}") String username,
-            @NotBlank(message = "{required}") String password, HttpServletRequest request) throws Exception {
-        username = StringUtils.lowerCase(username);
-        password = MD5Util.encrypt(username, password);
+    public AdminResponse login(@Valid @RequestBody UserVM.UserUPVM upvm, HttpServletRequest request) throws Exception {
+        String username = StringUtils.lowerCase(upvm.getUsername());
+        String password = MD5Util.encrypt(username, upvm.getPassword());
 
         final String errorMessage = "用户名或密码错误";
         User user = this.userManager.getUser(username);
@@ -155,10 +155,8 @@ public class LoginController {
     }
 
     @PostMapping("regist")
-    public void regist(
-            @NotBlank(message = "{required}") String username,
-            @NotBlank(message = "{required}") String password) throws Exception {
-        this.userService.regist(username, password);
+    public void regist(@Valid @RequestBody UserVM.UserUPVM upvm) throws Exception {
+        this.userService.regist(upvm.getUsername(), upvm.getPassword());
     }
 
     private String saveTokenToRedis(User user, JWTToken token, HttpServletRequest request) throws Exception {

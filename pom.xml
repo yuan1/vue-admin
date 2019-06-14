@@ -5,7 +5,7 @@
 
     <groupId>cn.javayuan</groupId>
     <artifactId>admin</artifactId>
-    <version>1.1.0</version>
+    <version>1.2.1</version>
     <packaging>jar</packaging>
 
     <name>admin</name>
@@ -138,9 +138,9 @@
             <version>2.9.2</version>
         </dependency>
         <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger-ui</artifactId>
-            <version>2.9.2</version>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>swagger-bootstrap-ui</artifactId>
+            <version>1.9.1</version>
         </dependency>
         <!-- Excel工具 -->
         <dependency>

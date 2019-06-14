@@ -49,7 +49,7 @@ public class MenuController extends BaseController {
     @Log("新增菜单/按钮")
     @PostMapping
     @RequiresPermissions("menu:add")
-    public void addMenu(@Valid Menu menu) throws AdminException {
+    public void addMenu(@Valid @RequestBody Menu menu) throws AdminException {
         try {
             this.menuService.createMenu(menu);
         } catch (Exception e) {
@@ -76,7 +76,7 @@ public class MenuController extends BaseController {
     @Log("修改菜单/按钮")
     @PutMapping
     @RequiresPermissions("menu:update")
-    public void updateMenu(@Valid Menu menu) throws AdminException {
+    public void updateMenu(@Valid @RequestBody Menu menu) throws AdminException {
         try {
             this.menuService.updateMenu(menu);
         } catch (Exception e) {
@@ -86,7 +86,7 @@ public class MenuController extends BaseController {
         }
     }
 
-    @PostMapping("excel")
+    @GetMapping("excel")
     @RequiresPermissions("menu:export")
     public void export(Menu menu, HttpServletResponse response) throws AdminException {
         try {

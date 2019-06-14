@@ -40,7 +40,7 @@ public class DictController extends BaseController {
     @Log("新增字典")
     @PostMapping
     @RequiresPermissions("dict:add")
-    public void addDict(@Valid Dict dict) throws AdminException {
+    public void addDict(@Valid @RequestBody Dict dict) throws AdminException {
         try {
             this.dictService.createDict(dict);
         } catch (Exception e) {
@@ -67,7 +67,7 @@ public class DictController extends BaseController {
     @Log("修改字典")
     @PutMapping
     @RequiresPermissions("dict:update")
-    public void updateDict(@Valid Dict dict) throws AdminException {
+    public void updateDict(@Valid @RequestBody Dict dict) throws AdminException {
         try {
             this.dictService.updateDict(dict);
         } catch (Exception e) {
@@ -77,7 +77,7 @@ public class DictController extends BaseController {
         }
     }
 
-    @PostMapping("excel")
+    @GetMapping("excel")
     @RequiresPermissions("dict:export")
     public void export(QueryRequest request, Dict dict, HttpServletResponse response) throws AdminException {
         try {

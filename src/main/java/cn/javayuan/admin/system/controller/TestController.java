@@ -110,7 +110,7 @@ public class TestController extends BaseController {
     /**
      * 导出 Excel
      */
-    @PostMapping("export")
+    @GetMapping("export")
     public void export(HttpServletResponse response) throws AdminException {
         try {
             List<Test> list = this.testService.findTests();
