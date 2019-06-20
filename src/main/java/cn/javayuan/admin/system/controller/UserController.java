@@ -128,9 +128,11 @@ public class UserController extends BaseController {
     }
 
     @GetMapping("password/check")
-    public boolean checkPassword(@Valid @RequestBody UserVM.UserUPVM upvm) {
-        String encryptPassword = MD5Util.encrypt(upvm.getUsername(), upvm.getPassword());
-        User user = userService.findByName(upvm.getUsername());
+    public boolean checkPassword(
+            @NotBlank(message = "{required}") String username,
+            @NotBlank(message = "{required}") String password) {
+        String encryptPassword = MD5Util.encrypt(username, password);
+        User user = userService.findByName(username);
         if (user != null)
             return StringUtils.equals(user.getPassword(), encryptPassword);
         else
