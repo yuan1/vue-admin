@@ -87,8 +87,8 @@ public interface UserService extends IService<User> {
     /**
      * 重置密码
      *
-     * @param usernames 用户集合
+     * @param dis 用户集合
      */
-    void resetPassword(String[] usernames) throws Exception;
+    void resetPassword(String[] dis) throws Exception;
 
 }

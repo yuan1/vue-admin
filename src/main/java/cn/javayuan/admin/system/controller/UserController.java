@@ -152,10 +152,10 @@ public class UserController extends BaseController {
 
     @GetMapping("password/reset")
     @RequiresPermissions("user:reset")
-    public void resetPassword(@NotBlank(message = "{required}") String usernames) throws AdminException {
+    public void resetPassword(@NotBlank(message = "{required}") String ids) throws AdminException {
         try {
-            String[] usernameArr = usernames.split(StringPool.COMMA);
-            this.userService.resetPassword(usernameArr);
+            String[] idsArr = ids.split(StringPool.COMMA);
+            this.userService.resetPassword(idsArr);
         } catch (Exception e) {
             message = "重置用户密码失败";
             log.error(message, e);
