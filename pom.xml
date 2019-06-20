@@ -5,7 +5,7 @@
 
     <groupId>cn.javayuan</groupId>
     <artifactId>admin</artifactId>
-    <version>1.2.2</version>
+    <version>1.2.3</version>
     <packaging>jar</packaging>
 
     <name>admin</name>
