@@ -133,6 +133,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     @Transactional
     public void updateProfile(User user) throws Exception {
+        // 更新用户
+        user.setPassword(null);
+        user.setModifyTime(new Date());
         updateById(user);
         // 重新缓存用户信息
         cacheService.saveUser(user.getUsername());
